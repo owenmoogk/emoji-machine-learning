@@ -1,14 +1,12 @@
 var grid; // assigned by clearDrawing()
 var gridSize = 28; // how many colums/rows to have
 var cellSize; // calculated by resetCellSize()
-var inputSize = 0; // updated by getLiveGuess()
-var timeSinceGuess = 0; // updated by getLiveGuess()
+var timeSinceGuess = 0;
 var bgColor; // assign in setup()
 var drawColor; // assign in setup()
 var maxCanvasSize = 500; // keep canvas from getting too big
 var minCanvasSize = 200; // keep canvas from getting too small
 var canvasSize; // updated by resetCanvasSize()
-var modelIsTrained; // used by getLiveGuess()
 
 // REQUIRED P5.JS FUNCTIONS
 function setup() {
@@ -19,7 +17,6 @@ function setup() {
 	bgColor = color(50, 50, 50); // dark gray
 	drawColor = color(50, 170, 200); // teal
 	moveElementsBelowCanvas();
-	train();
 }
 
 function draw() {
@@ -28,13 +25,14 @@ function draw() {
 	drawGrid(grid);
 }
 
-// PAGE UPDATES
+// reshuffling the page
 function moveElementsBelowCanvas() {
 	document.body.appendChild(
 		document.getElementById('below-canvas')
 	);
 }
 
+// resize on window change
 function windowResized() {
 	resetCanvasSize();
 	resizeCanvas(canvasSize, canvasSize);
@@ -47,22 +45,6 @@ function resetCanvasSize() {
 
 function resetCellSize() {
 	cellSize = width / gridSize;
-}
-
-function updateFromResponse(response) {
-	print(response)
-	if (response["training"] == "complete") {
-		modelIsTrained = true;
-	}
-	if (response["prediction"] == "complete") {
-		document.getElementById("guessed").innerHTML = response["guess"];
-	}
-	if (response["samples"]) {
-		document.getElementById("trained").innerHTML = formatTrainingInfo(response["samples"]);
-	}
-	if (response["deletion"] == "complete") {
-		document.getElementById("trained").innerHTML = "none...";
-	}
 }
 
 // CANVAS UPDATES
@@ -102,9 +84,9 @@ function resetGrid() {
 
 // USER INTERACTIONS
 function mouseDragged() {
-	if (onCanvas()) { // don't interfere with other scrolling
+	if (onCanvas()) {
 		addToDrawing();
-		if (getLiveGuess()) {  // live prediction as you draw
+		if (timeSinceGuess > 50) {
 			getPrediction();
 			timeSinceGuess = 0;
 		} else {
@@ -124,18 +106,6 @@ function onCanvas() {
 	return (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY < height)
 }
 
-function getLiveGuess() {
-	if (modelIsTrained && inputSize > 10 && timeSinceGuess > 100) {
-		return true;
-	}
-	return false;
-}
-
-function roundTo(value, decimals) {
-	var result = parseFloat(value.toFixed(decimals))
-	return result;
-}
-
 function getcellLoc(x, y) {
 	var col = floor(x / cellSize);
 	var row = floor(y / cellSize);
@@ -145,66 +115,60 @@ function getcellLoc(x, y) {
 	return [col, row];
 }
 
-function formatTrainingInfo(info) {
-	// print(info)
-	var result = [];
-	for (var label in info) {
-		string = label + info[label] + "x";
-		result.push(string);
-	}
-	return result.join("  //  ");
-}
-
 // HTTP REQUESTS
-function train(value) {
-	var dataString = JSON.stringify({ collection: "requested", training: "requested" });
-	if (value) {
-		dataString = JSON.stringify({ label: value, features: grid, training: "requested" });
-	}
-	(async () => {
-		const rawResponse = await fetch("/train", {
-			method: 'POST',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			body: dataString
-		});
-
-		const content = await rawResponse.json();
-		clearDrawing();
-		updateFromResponse(content);
-	})();
+function train(emojiValue) {
+	dataString = JSON.stringify({ label: emojiValue, features: grid });
+	fetch("/ai/train/", {
+		method: 'POST',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+			'X-CSRFToken': getCookie('csrftoken')
+		},
+		body: dataString
+	})
+	clearDrawing();
 }
 
 function getPrediction() {
-	(async () => {
-		const rawResponse = await fetch("/guess", {
-			method: 'POST',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ features: grid, prediction: "requested" })
-		});
-
-		const content = await rawResponse.json();
-		updateFromResponse(content);
-	})();
+	console.log('getting prediction');
+	timeSinceGuess = 0;
+	fetch("/ai/guess/", {
+		method: 'POST',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+			'X-CSRFToken': getCookie('csrftoken')
+		},
+		body: JSON.stringify({ features: grid })
+	})
+		.then(response => response.json())
+		.then(json => console.log(json))
 }
 
 function deleteSamples() {
-	(async () => {
-		const rawResponse = await fetch("/delete", {
-			method: 'POST',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ deletion: "requested" })
-		});
+	fetch("/ai/delete/", {
+		method: 'POST',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+			'X-CSRFToken': getCookie('csrftoken')
+		},
+		body: JSON.stringify({ deletion: "requested" })
+	})
+}
 
-		const content = await rawResponse.json();
-		updateFromResponse(content);
-	})();
+// for requests
+function getCookie(name) {
+	if (!document.cookie) {
+		return null;
+	}
+	const xsrfCookies = document.cookie.split(';')
+		.map(c => c.trim())
+		.filter(c => c.startsWith(name + '='));
+
+	if (xsrfCookies.length === 0) {
+		return null;
+	}
+	return decodeURIComponent(xsrfCookies[0].split('=')[1]);
 }
