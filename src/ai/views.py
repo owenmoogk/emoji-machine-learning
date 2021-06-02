@@ -27,7 +27,7 @@ def predict(request):
 
 	# if there is no training data then fitting the model fails, we need to return none
 	if len(training_labels) < 1:
-		return Response({'Error': "No training data at the moment"}, status=status.HTTP_404_NOT_FOUND)
+		return Response({'Error': "No training data at the moment"}, status=status.HTTP_200_OK)
 
 	model = tree.DecisionTreeClassifier()
 	model = model.fit(training_features,training_labels)
