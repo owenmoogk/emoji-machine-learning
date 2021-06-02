@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './style.css'
+import Button from './Button'
 
 export default function App() {
+
+	const [emojiList, setEmojiLista] = useState()
 
 	return (
 		<div id='page'>
@@ -14,13 +17,26 @@ export default function App() {
 			</div>
 
 			<div id="buttons">
-				<button id="delete-button" className="button" onClick={() => deleteSamples()}>☠️<br/><span className="button-text">DELETE</span></button>
-			
-				<button id="clear-button" className="button" onClick={() => resetGrid()}>🚫<br/><span className="button-text">CLEAR</span></button>
+				<button id="delete-button" className="button" onClick={() => deleteSamples()}>
+					☠️
+					<br />
+					<span className="button-text">DELETE</span>
+				</button>
 
-				{/*
-					<button className="row1" type="button" onclick=train('{{ emoji }}');>{{ emoji }}<br><span className="button-text">Submit</span></button>
-				*/}
+				<button id="clear-button" className="button" onClick={() => resetGrid()}>
+					🚫
+					<br />
+					<span className="button-text">CLEAR</span>
+				</button>
+
+				<br/>
+				<br/>
+
+				<Button emoji='🙂'></Button>
+				<Button emoji='🚀'></Button>
+				<Button emoji='💎'></Button>
+				<Button emoji='👍'></Button>
+
 			</div>
 
 			<div id="below-canvas">
