@@ -20,7 +20,7 @@ def train(request):
 
 # gets a prediction
 @api_view(["POST"])
-def predict(request):
+def guess(request):
 
 	# load the training data
 	training_features,training_labels = load_training_data()

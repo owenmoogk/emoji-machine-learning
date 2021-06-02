@@ -4,5 +4,5 @@ from .views import *
 urlpatterns = [
 	path('train/', train),
 	path('delete/', delete),
-	path('guess/', predict)
+	path('guess/', guess),
 ]
