@@ -98,7 +98,8 @@ function mouseDragged() {
 
 function clearDrawing() {
 	resetGrid();
-	document.getElementById("guessed").innerHTML = "waiting...";
+	document.getElementById("guess").innerHTML = "None";
+	getTrainingNumber()
 }
 
 // HELPERS
@@ -127,11 +128,18 @@ function train(emojiValue) {
 		},
 		body: dataString
 	})
-	clearDrawing();
+	.then(clearDrawing())
+}
+
+function getTrainingNumber() {
+	fetch("/ai/getDataStats/")
+		.then(response => response.json())
+		.then(json => {
+			document.getElementById("numberOfData").innerHTML = json.length;
+		})
 }
 
 function getPrediction() {
-	console.log('getting prediction');
 	timeSinceGuess = 0;
 	fetch("/ai/guess/", {
 		method: 'POST',
@@ -143,7 +151,11 @@ function getPrediction() {
 		body: JSON.stringify({ features: grid })
 	})
 		.then(response => response.json())
-		.then(json => console.log(json))
+		.then(json => {
+			if (json.guess){
+				document.getElementById("guess").innerHTML = json.guess;
+			}
+		})
 }
 
 function deleteSamples() {
@@ -156,6 +168,7 @@ function deleteSamples() {
 		},
 		body: JSON.stringify({ deletion: "requested" })
 	})
+	.then(clearDrawing())
 }
 
 // for requests

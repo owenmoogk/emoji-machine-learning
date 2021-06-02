@@ -34,7 +34,7 @@ def guess(request):
 
 	features = flatten_list(request.data['features'])
 	guess = model.predict([features])
-	return Response({'Prediction': guess}, status=status.HTTP_200_OK)
+	return Response({'guess': guess}, status=status.HTTP_200_OK)
 
 def load_training_data():
 	training_features = []
@@ -66,3 +66,8 @@ def flatten_list(list_2d):
 def delete(request):
 	open("samples.txt", "w").close()
 	return Response({}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def getDataStats(request):
+	trainingData, trainingLabels = load_training_data()
+	return Response({"length": len(trainingLabels)}, status=status.HTTP_200_OK)

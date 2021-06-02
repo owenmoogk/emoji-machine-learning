@@ -5,4 +5,5 @@ urlpatterns = [
 	path('train/', train),
 	path('delete/', delete),
 	path('guess/', guess),
+	path('getDataStats/', getDataStats)
 ]

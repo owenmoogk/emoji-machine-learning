@@ -4,16 +4,14 @@ import Button from './Button'
 
 export default function App() {
 
-	const [emojiList, setEmojiLista] = useState()
-
 	return (
 		<div id='page'>
 
 			<h2>Emoji Machine Learning</h2>
 
 			<div>
-				<p className="result"><b>Training Data:</b> <span id="trained">None...</span></p>
-				<p className="result"><b>Current Guess:</b> <span id="guessed">Waiting...</span></p>
+				<p className="result"><b>Training Data:</b> <span id="numberOfData"></span></p>
+				<p className="result"><b>Current Guess:</b> <span id="guess">Waiting...</span></p>
 			</div>
 
 			<div id="buttons">
@@ -23,7 +21,7 @@ export default function App() {
 					<span className="button-text">DELETE</span>
 				</button>
 
-				<button id="clear-button" className="button" onClick={() => resetGrid()}>
+				<button id="clear-button" className="button" onClick={() => clearDrawing()}>
 					🚫
 					<br />
 					<span className="button-text">CLEAR</span>
