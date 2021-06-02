@@ -36,18 +36,6 @@ export default function App() {
 				<Button emoji='👍'></Button>
 
 			</div>
-
-			<div id="below-canvas">
-				<div id="instructions">
-					<h3>Instructions</h3>
-					<ul>
-						<li>Draw emojis and submit them to train the Machine Learning model.
-						</li>
-						<li>Clear will reset the drawing.</li>
-					</ul>
-				</div>
-			</div>
-
 		</div>
 	);
 }

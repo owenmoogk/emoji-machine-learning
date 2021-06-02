@@ -16,21 +16,13 @@ function setup() {
 	clearDrawing();
 	bgColor = color(50, 50, 50); // dark gray
 	drawColor = color(50, 170, 200); // teal
-	moveElementsBelowCanvas();
 }
 
 function draw() {
 	background(bgColor);
 	noStroke();
 	drawGrid(grid);
-}
-
-// reshuffling the page
-function moveElementsBelowCanvas() {
-	document.body.appendChild(
-		document.getElementById('below-canvas')
-	);
-}
+}1
 
 // resize on window change
 function windowResized() {
