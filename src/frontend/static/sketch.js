@@ -11,7 +11,8 @@ var canvasSize; // updated by resetCanvasSize()
 // REQUIRED P5.JS FUNCTIONS
 function setup() {
 	resetCanvasSize();
-	createCanvas(canvasSize, canvasSize);
+	let canvas = createCanvas(canvasSize, canvasSize);
+	canvas.parent('canvas-container')
 	resetCellSize();
 	clearDrawing();
 	bgColor = color(50, 50, 50); // dark gray

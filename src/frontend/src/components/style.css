@@ -1,9 +1,8 @@
-*{
+* {
 	font-family: 'IBM Plex Sans', sans-serif;
 }
 
 body {
-	background-color: rgb(144, 221, 211);
 	margin: 0px;
 }
 
@@ -22,39 +21,46 @@ h2 {
 	font-size: 1.3em;
 }
 
+#body {
+	display: flex;
+	flex-direction: row;
+}
+
+#left, #right{
+	flex: 1;
+}
+
+#description{
+	width: 80%;
+	margin: auto;
+}
+
+#headers{
+	text-align: center;
+}
+
+#canvas-container{
+	width: fit-content;
+	margin: auto;
+}
+
+/* buttons */
+
 .button {
 	background-color: rgb(230, 230, 230);
 	font-size: 1.5em;
 	height: 60px;
 	width: 60px;
 	padding: 0px 10px;
-	border: 0.2rem solid rgb(245, 245, 245);
+	border: 0.2rem solid rgb(200, 200, 200);
 }
-
-canvas{
-	margin-left: calc(50vw - 250px);
-}
-
-/* buttons */
 
 button:hover {
-	background-color: rgb(245, 245, 245);
-}
-
-#delete-button {
-	border-color: rgb(241, 179, 179);
-}
-
-#delete-button:hover {
-	background-color: rgb(241, 179, 179);
+	background-color: rgb(200, 200, 200);
 }
 
 #clear-button {
-	border-color: rgb(200, 200, 200);
-}
-
-#clear-button:hover {
-	background-color: rgb(200, 200, 200);
+	margin-right: 10px;
 }
 
 .button-text {
