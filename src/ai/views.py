@@ -10,17 +10,11 @@ from rest_framework.decorators import api_view
 # adds the current grid to the samples.txt file
 @api_view(["POST"])
 def train(request):
-	# converting data to a dict
-	data = json.loads(request.body.decode("UTF-8"))
 
-	# if its a 'valid' request
-	if "label" in data.keys() and "features" in data.keys():
-		
-		sample = {"label": data["label"], "features": data["features"]}
-		data_string = json.dumps(sample)
+	data_string = json.dumps(request.data)
 
-		with open('samples.txt', "a+") as text:
-			text.write(f'{data_string}\n')
+	with open('samples.txt', "a+") as text:
+		text.write(f'{data_string}\n')
 
 	return Response({}, status=status.HTTP_200_OK)
 
