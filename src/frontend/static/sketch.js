@@ -125,10 +125,14 @@ function train(emojiValue) {
 }
 
 function getTrainingNumber() {
+	var responseText = '';
 	fetch("/ai/getDataStats/")
 		.then(response => response.json())
 		.then(json => {
-			document.getElementById("numberOfData").innerHTML = json.length;
+			Object.entries(json).forEach(([key, value]) => {
+				responseText += key+": "+value+", "
+			})
+			document.getElementById('numberOfData').innerText = responseText
 		})
 }
 

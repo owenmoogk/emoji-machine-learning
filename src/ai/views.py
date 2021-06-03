@@ -70,4 +70,12 @@ def delete(request):
 @api_view(['GET'])
 def getDataStats(request):
 	trainingData, trainingLabels = load_training_data()
-	return Response({"length": len(trainingLabels)}, status=status.HTTP_200_OK)
+	emojiNumbers = {
+		'🙂': 0,
+		"🚀": 0,
+		'💎': 0,
+		'👍': 0
+	}
+	for label in trainingLabels:
+		emojiNumbers[label] += 1
+	return Response(emojiNumbers, status=status.HTTP_200_OK)
