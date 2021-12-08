@@ -15,7 +15,6 @@ export default function App() {
 				<div id='left'>
 					<div id='headers'>
 						<p className="result"><b>Training Data:</b> <span id="numberOfData"></span></p>
-						<p className="result"><b>Current Guess:</b> <span id="guess">Waiting...</span></p>
 					</div>
 					<div id='description'>
 						This is a machine learning website! It takes inputs from user to train a model, and then uses that model to predict what the user has drawn. Try it out!
@@ -46,6 +45,7 @@ export default function App() {
 						<Button emoji='💎'></Button>
 						<Button emoji='👍'></Button>
 
+						<p className="result"><b>Current Guess:</b> <span id="guess">Waiting...</span></p>
 					</div>
 					<br/>
 					<div id='canvas-container'></div>
